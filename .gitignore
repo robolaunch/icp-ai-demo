@@ -33,3 +33,4 @@ vendor
 
 # helm packages
 *.tgz
+chart-packages

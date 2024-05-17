@@ -1,5 +1,6 @@
 KAFKA_MANIFESTS_PATH = artifacts/manifests/kafka
 KAFKA_CHART_PATH = artifacts/charts/kafka
+CHART_PACKAGES_PATH = artifacts/packages
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -23,6 +24,7 @@ $(LOCALBIN):
 
 ## Tool Binaries
 HELMIFY ?= $(LOCALBIN)/helmify
+HELM ?= helm
 
 .PHONY: helmify
 helmify: $(HELMIFY) ## Download helmify locally if necessary.
@@ -31,3 +33,7 @@ $(HELMIFY): $(LOCALBIN)
 
 generate-charts: helmify
 	$(HELMIFY) -f ${KAFKA_MANIFESTS_PATH} -r ${KAFKA_CHART_PATH}
+
+generate-chart-packages:
+	$(HELM) package ${KAFKA_CHART_PATH} -d ${CHART_PACKAGES_PATH}
+
