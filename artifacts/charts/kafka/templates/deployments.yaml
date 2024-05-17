@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kafka.fullname" . }}-cluster-operator
+  labels:
+    app: strimzi
+  {{- include "kafka.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.clusterOperator.replicas }}
+  selector:
+    matchLabels:
+      name: strimzi-cluster-operator
+      strimzi.io/kind: cluster-operator
+    {{- include "kafka.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        name: strimzi-cluster-operator
+        strimzi.io/kind: cluster-operator
+      {{- include "kafka.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - args: {{- toYaml .Values.clusterOperator.strimziClusterOperator.args | nindent
+          8 }}
+        env:
+        - name: STRIMZI_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: STRIMZI_FULL_RECONCILIATION_INTERVAL_MS
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziFullReconciliationIntervalMs
+            }}
+        - name: STRIMZI_OPERATION_TIMEOUT_MS
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziOperationTimeoutMs
+            }}
+        - name: STRIMZI_DEFAULT_KAFKA_EXPORTER_IMAGE
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultKafkaExporterImage
+            }}
+        - name: STRIMZI_DEFAULT_CRUISE_CONTROL_IMAGE
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultCruiseControlImage
+            }}
+        - name: STRIMZI_KAFKA_IMAGES
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziKafkaImages
+            }}
+        - name: STRIMZI_KAFKA_CONNECT_IMAGES
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziKafkaConnectImages
+            }}
+        - name: STRIMZI_KAFKA_MIRROR_MAKER_IMAGES
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziKafkaMirrorMakerImages
+            }}
+        - name: STRIMZI_KAFKA_MIRROR_MAKER_2_IMAGES
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziKafkaMirrorMaker2Images
+            }}
+        - name: STRIMZI_DEFAULT_TOPIC_OPERATOR_IMAGE
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultTopicOperatorImage
+            }}
+        - name: STRIMZI_DEFAULT_USER_OPERATOR_IMAGE
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultUserOperatorImage
+            }}
+        - name: STRIMZI_DEFAULT_KAFKA_INIT_IMAGE
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultKafkaInitImage
+            }}
+        - name: STRIMZI_DEFAULT_KAFKA_BRIDGE_IMAGE
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultKafkaBridgeImage
+            }}
+        - name: STRIMZI_DEFAULT_KANIKO_EXECUTOR_IMAGE
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultKanikoExecutorImage
+            }}
+        - name: STRIMZI_DEFAULT_MAVEN_BUILDER
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziDefaultMavenBuilder
+            }}
+        - name: STRIMZI_OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: STRIMZI_FEATURE_GATES
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziFeatureGates
+            }}
+        - name: STRIMZI_LEADER_ELECTION_ENABLED
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziLeaderElectionEnabled
+            }}
+        - name: STRIMZI_LEADER_ELECTION_LEASE_NAME
+          value: {{ quote .Values.clusterOperator.strimziClusterOperator.env.strimziLeaderElectionLeaseName
+            }}
+        - name: STRIMZI_LEADER_ELECTION_LEASE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: STRIMZI_LEADER_ELECTION_IDENTITY
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.clusterOperator.strimziClusterOperator.image.repository }}:{{
+          .Values.clusterOperator.strimziClusterOperator.image.tag | default .Chart.AppVersion
+          }}
+        livenessProbe:
+          httpGet:
+            path: /healthy
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        name: strimzi-cluster-operator
+        ports:
+        - containerPort: 8080
+          name: http
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        resources: {{- toYaml .Values.clusterOperator.strimziClusterOperator.resources
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /tmp
+          name: strimzi-tmp
+        - mountPath: /opt/strimzi/custom-config/
+          name: co-config-volume
+      serviceAccountName: {{ include "kafka.fullname" . }}-cluster-operator
+      volumes:
+      - emptyDir:
+          medium: Memory
+          sizeLimit: 1Mi
+        name: strimzi-tmp
+      - configMap:
+          name: {{ include "kafka.fullname" . }}-cluster-operator
+        name: co-config-volume

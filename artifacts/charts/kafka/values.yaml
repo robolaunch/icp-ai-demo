@@ -1,0 +1,55 @@
+clusterOperator:
+  log4J2Properties:
+    monitorInterval: ' 30'
+    name: ' COConfig'
+  replicas: 1
+  serviceAccount:
+    annotations: {}
+  strimziClusterOperator:
+    args:
+    - /opt/strimzi/bin/cluster_operator_run.sh
+    env:
+      strimziDefaultCruiseControlImage: quay.io/strimzi/kafka:0.41.0-kafka-3.7.0
+      strimziDefaultKafkaBridgeImage: quay.io/strimzi/kafka-bridge:0.28.0
+      strimziDefaultKafkaExporterImage: quay.io/strimzi/kafka:0.41.0-kafka-3.7.0
+      strimziDefaultKafkaInitImage: quay.io/strimzi/operator:0.41.0
+      strimziDefaultKanikoExecutorImage: quay.io/strimzi/kaniko-executor:0.41.0
+      strimziDefaultMavenBuilder: quay.io/strimzi/maven-builder:0.41.0
+      strimziDefaultTopicOperatorImage: quay.io/strimzi/operator:0.41.0
+      strimziDefaultUserOperatorImage: quay.io/strimzi/operator:0.41.0
+      strimziFeatureGates: ""
+      strimziFullReconciliationIntervalMs: "120000"
+      strimziKafkaConnectImages: |
+        3.6.0=quay.io/strimzi/kafka:0.41.0-kafka-3.6.0
+        3.6.1=quay.io/strimzi/kafka:0.41.0-kafka-3.6.1
+        3.6.2=quay.io/strimzi/kafka:0.41.0-kafka-3.6.2
+        3.7.0=quay.io/strimzi/kafka:0.41.0-kafka-3.7.0
+      strimziKafkaImages: |
+        3.6.0=quay.io/strimzi/kafka:0.41.0-kafka-3.6.0
+        3.6.1=quay.io/strimzi/kafka:0.41.0-kafka-3.6.1
+        3.6.2=quay.io/strimzi/kafka:0.41.0-kafka-3.6.2
+        3.7.0=quay.io/strimzi/kafka:0.41.0-kafka-3.7.0
+      strimziKafkaMirrorMaker2Images: |
+        3.6.0=quay.io/strimzi/kafka:0.41.0-kafka-3.6.0
+        3.6.1=quay.io/strimzi/kafka:0.41.0-kafka-3.6.1
+        3.6.2=quay.io/strimzi/kafka:0.41.0-kafka-3.6.2
+        3.7.0=quay.io/strimzi/kafka:0.41.0-kafka-3.7.0
+      strimziKafkaMirrorMakerImages: |
+        3.6.0=quay.io/strimzi/kafka:0.41.0-kafka-3.6.0
+        3.6.1=quay.io/strimzi/kafka:0.41.0-kafka-3.6.1
+        3.6.2=quay.io/strimzi/kafka:0.41.0-kafka-3.6.2
+        3.7.0=quay.io/strimzi/kafka:0.41.0-kafka-3.7.0
+      strimziLeaderElectionEnabled: "true"
+      strimziLeaderElectionLeaseName: strimzi-cluster-operator
+      strimziOperationTimeoutMs: "300000"
+    image:
+      repository: quay.io/strimzi/operator
+      tag: 0.41.0
+    resources:
+      limits:
+        cpu: "1"
+        memory: 384Mi
+      requests:
+        cpu: 200m
+        memory: 384Mi
+kubernetesClusterDomain: cluster.local
