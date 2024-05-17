@@ -34,8 +34,8 @@ $(HELMIFY): $(LOCALBIN)
 	test -s $(LOCALBIN)/helmify || GOBIN=$(LOCALBIN) go install github.com/arttor/helmify/cmd/helmify@latest
 
 generate-charts: helmify
-#	$(HELMIFY) -f ${KAFKA_MANIFESTS_PATH} -r ${KAFKA_CHART_PATH}
-	$(HELMIFY) -f ${DS_INFERENCE_MANIFESTS_PATH} -r ${DS_INFERENCE_CHART_PATH}
+	$(HELMIFY) -f ${KAFKA_MANIFESTS_PATH} -r ${KAFKA_CHART_PATH}
+#	$(HELMIFY) -f ${DS_INFERENCE_MANIFESTS_PATH} -r ${DS_INFERENCE_CHART_PATH}
 
 generate-chart-packages:
 	$(HELM) package ${KAFKA_CHART_PATH} -d ${CHART_PACKAGES_PATH}
