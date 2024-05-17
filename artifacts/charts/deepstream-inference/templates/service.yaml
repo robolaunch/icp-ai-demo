@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "deepstream-inference.fullname" . }}-deepstream
+  labels:
+  {{- include "deepstream-inference.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.deepstream.type }}
+  selector:
+    app: deepstream
+  {{- include "deepstream-inference.selectorLabels" . | nindent 4 }}
+  ports:
+	{{- .Values.deepstream.ports | toYaml | nindent 2 }}

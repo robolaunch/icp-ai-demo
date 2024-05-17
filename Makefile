@@ -1,5 +1,7 @@
 KAFKA_MANIFESTS_PATH = artifacts/manifests/kafka
 KAFKA_CHART_PATH = artifacts/charts/kafka
+DS_INFERENCE_MANIFESTS_PATH = artifacts/manifests/deepstream-inference
+DS_INFERENCE_CHART_PATH = artifacts/charts/deepstream-inference
 CHART_PACKAGES_PATH = artifacts/packages
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
@@ -32,8 +34,10 @@ $(HELMIFY): $(LOCALBIN)
 	test -s $(LOCALBIN)/helmify || GOBIN=$(LOCALBIN) go install github.com/arttor/helmify/cmd/helmify@latest
 
 generate-charts: helmify
-	$(HELMIFY) -f ${KAFKA_MANIFESTS_PATH} -r ${KAFKA_CHART_PATH}
+#	$(HELMIFY) -f ${KAFKA_MANIFESTS_PATH} -r ${KAFKA_CHART_PATH}
+	$(HELMIFY) -f ${DS_INFERENCE_MANIFESTS_PATH} -r ${DS_INFERENCE_CHART_PATH}
 
 generate-chart-packages:
 	$(HELM) package ${KAFKA_CHART_PATH} -d ${CHART_PACKAGES_PATH}
+	$(HELM) package ${DS_INFERENCE_CHART_PATH} -d ${CHART_PACKAGES_PATH}
 

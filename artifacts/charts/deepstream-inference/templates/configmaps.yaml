@@ -1,0 +1,278 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "deepstream-inference.fullname" . }}-deepstream
+  labels:
+  {{- include "deepstream-inference.labels" . | nindent 4 }}
+data:
+  deepstream_setup.sh: |
+    #!/bin/bash
+    
+    # from deepstream-test5
+    cd /opt/nvidia/deepstream/deepstream-6.4
+    apt-get install -y \
+      libgstreamer-plugins-base1.0-dev \
+      libgstreamer1.0-dev \
+      libgstrtspserver-1.0-dev \
+      libx11-dev \
+      libjson-glib-dev \
+      libyaml-cpp-dev
+    
+    # from /opt/nvidia/deepstream/deepstream/sources/libs/kafka_protocol_adaptor
+    cd /opt/nvidia/deepstream/deepstream-6.4
+    git clone https://github.com/confluentinc/librdkafka.git
+    cd librdkafka
+    git checkout tags/v2.2.0
+    
+    # --enable-ssl
+    ./configure
+    make
+    make install
+    cp /usr/local/lib/librdkafka* /opt/nvidia/deepstream/deepstream/lib/
+    ldconfig
+    
+    apt-get install -y \
+      libglib2.0 \
+      libglib2.0-dev \
+      libjansson4 \
+      libjansson-dev \
+      libssl-dev \ 
+      protobuf-compiler
+      
+    # from deepstream-test5
+    cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
+    export CUDA_VER=12.2
+    make
+    
+    cd /opt/nvidia/deepstream/deepstream-6.4
+    git clone https://github.com/WongKinYiu/yolov7.git
+    git clone https://github.com/marcoslucianops/DeepStream-Yolo
+    cd yolov7
+    pip3 install -r requirements.txt
+    pip3 install onnx onnxsim onnxruntime
+    cp ../DeepStream-Yolo/utils/export_yoloV7.py .
+    wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
+    python3 export_yoloV7.py -w yolov7.pt --dynamic
+    cp labels.txt ../DeepStream-Yolo
+    cp yolov7.onnx ../DeepStream-Yolo
+    cd /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo
+    CUDA_VER=12.2 make -C nvdsinfer_custom_impl_Yolo
+    cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
+    
+    # move artifacts from DeepStream-YOLO repository to deepstream-test5
+    cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/config_infer_primary_yoloV7.txt .
+    cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/labels.txt .
+    cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/yolov7.onnx .
+    cp -r /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/ .
+    
+    echo -n \"--------------FINISHED--------------\"
+  dstest5_msgconv_sample_config.txt: |
+    [sensor0]
+    enable=1
+    type=Camera
+    id=HWY_20_AND_LOCUST__EBA__4_11_2018_4_59_59_508_AM_UTC-07_00
+    location=45.293701447;-75.8303914499;48.1557479338
+    description=Aisle Camera
+    coordinate=5.2;10.1;11.2
+
+    [sensor1]
+    enable=1
+    type=Camera
+    id=HWY_20_AND_LOCUST__WBA__4_11_2018_4_59_59_379_AM_UTC-07_00
+    location=45.293701447;-75.8303914499;48.1557479338
+    description=Aisle Camera
+    coordinate=5.2;10.1;11.2
+
+    [sensor2]
+    enable=1
+    type=Camera
+    id=HWY_20_AND_DEVON__WBA__4_11_2018_4_59_59_134_AM_UTC-07_00
+    location=45.293701447;-75.8303914499;48.1557479338
+    description=Aisle Camera
+    coordinate=5.2;10.1;11.2
+
+    [sensor3]
+    enable=1
+    type=Camera
+    id=HWY_20_AND_LOCUST__4_11_2018_4_59_59_320_AM_UTC-07_00
+    location=45.293701447;-75.8303914499;48.1557479338
+    description=Aisle Camera
+    coordinate=5.2;10.1;11.2
+
+    [place0]
+    enable=1
+    id=0
+    type=intersection/road
+    name=HWY_20_AND_LOCUST__EBA
+    location=30.32;-40.55;100.0
+    coordinate=1.0;2.0;3.0
+    place-sub-field1=C_127_158
+    place-sub-field2=Lane 1
+    place-sub-field3=P1
+
+    [place1]
+    enable=1
+    id=1
+    type=intersection/road
+    name=HWY_20_AND_LOCUST__WBA
+    location=30.32;-40.55;100.0
+    coordinate=1.0;2.0;3.0
+    place-sub-field1=C_127_158
+    place-sub-field2=Lane 1
+    place-sub-field3=P1
+
+    [place2]
+    enable=1
+    id=2
+    type=intersection/road
+    name=HWY_20_AND_DEVON__WBA
+    location=30.32;-40.55;100.0
+    coordinate=1.0;2.0;3.0
+    place-sub-field1=C_127_158
+    place-sub-field2=Lane 1
+    place-sub-field3=P1
+
+    [place3]
+    enable=1
+    id=3
+    type=intersection/road
+    name=HWY_20_AND_LOCUST
+    location=30.32;-40.55;100.0
+    coordinate=1.0;2.0;3.0
+    place-sub-field1=C_127_158
+    place-sub-field2=Lane 1
+    place-sub-field3=P1
+
+    [analytics0]
+    enable=1
+    id=XYZ_1
+    description=Vehicle Detection and License Plate Recognition
+    source=OpenALR
+    version=1.0
+
+    [analytics1]
+    enable=1
+    id=XYZ_2
+    description=Vehicle Detection and License Plate Recognition 1
+    source=OpenALR
+    version=1.0
+
+    [analytics2]
+    enable=1
+    id=XYZ_3
+    description=Vehicle Detection and License Plate Recognition 2
+    source=OpenALR
+    version=1.0
+
+    [analytics3]
+    enable=1
+    id=XYZ_4
+    description=Vehicle Detection and License Plate Recognition 4
+    source=OpenALR
+    version=1.0
+  inference_config.txt: |
+    [application]
+    enable-perf-measurement=1
+    perf-measurement-interval-sec=5
+    #gie-kitti-output-dir=streamscl
+
+    [tiled-display]
+    enable=1
+    rows=1
+    columns=1
+    width={{ .Values.videoSink.width }}
+    height={{ .Values.videoSink.height }}
+    gpu-id=0
+    nvbuf-memory-type=0
+
+    [source0]
+    enable=1
+    type=4
+    uri={{ .Values.rtspSourceURL }}
+    num-sources=1
+    gpu-id=0
+    cudadec-memtype=0
+    nvbuf-memory-type=0
+
+    [sink0]
+    enable=1
+    #Type - 1=FakeSink 2=EglSink 3=File
+    type=3
+    sync=1
+    source-id=0
+    container=1
+    codec=2
+    output-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/out.mp4
+    gpu-id=0
+    nvbuf-memory-type=0
+
+    [sink1]
+    enable=1
+    source-id=0
+    sync=1
+    type=6
+    msg-conv-config=dstest5_msgconv_sample_config.txt
+    msg-conv-payload-type=1
+    msg-conv-msg2p-new-api=0
+    msg-conv-frame-interval=30
+    msg-broker-proto-lib=/opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so
+    msg-broker-conn-str={{ .Values.videoSink.kafka.ip }};{{ .Values.videoSink.kafka.port }};{{ .Values.videoSink.kafka.topic }}
+    topic={{ .Values.videoSink.kafka.topic }}
+
+    {{ if (default .Values.videoSink.rtsp.enabled true) }}
+    [sink2]
+    enable=1
+    type=4
+    rtsp-port={{ .Values.videoSink.rtsp.port }}
+    sync=0
+    source-id=0
+    codec=2
+    bitrate=1000000
+    {{ end }}
+
+    {{ if (default .Values.boundingBoxes.enabled true) }}
+    [osd]
+    enable=1
+    gpu-id=0
+    border-width={{ .Values.boundingBoxes.borderWidth }}
+    border-color={{ .Values.boundingBoxes.borderColor }}
+    text-size={{ .Values.boundingBoxes.textSize }}
+    text-color={{ .Values.boundingBoxes.textColor }}
+    text-bg-color={{ .Values.boundingBoxes.textBackgroundColor }}
+    font={{ .Values.boundingBoxes.font }}
+    show-clock=0
+    clock-x-offset=800
+    clock-y-offset=820
+    clock-text-size=12
+    clock-color=1;0;0;0
+    nvbuf-memory-type=0
+    {{ end }}
+
+    [streammux]
+    gpu-id=0
+    batch-size=1
+    batched-push-timeout=40000
+    width={{ .Values.videoSink.width }}
+    height={{ .Values.videoSink.height }}
+    enable-padding=0
+    nvbuf-memory-type=0
+    attach-sys-ts-as-ntp=1
+
+    [primary-gie]
+    enable=1
+    gpu-id=0
+    gie-unique-id=1
+    nvbuf-memory-type=0
+    config-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/hey_config_infer_primary_yoloV8.txt
+
+    [tracker]
+    enable=0
+    tracker-width=960
+    tracker-height=544
+    ll-lib-file=/opt/nvidia/deepstream/deepstream/lib/libnvds_nvmultiobjecttracker.so
+    ll-config-file=../../../../../samples/configs/deepstream-app/config_tracker_NvDCF_perf.yml
+    gpu-id=0
+    display-tracking-id=1
+
+    [tests]
+    file-loop=0

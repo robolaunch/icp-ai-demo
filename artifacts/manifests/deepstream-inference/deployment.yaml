@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: deepstream
+  name: deepstream
+  # namespace: deepstream
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deepstream
+  template:
+    metadata:
+      labels:
+        app: deepstream
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config/deepstream_setup.sh
+          && cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
+          && sleep infinity
+        image: nvcr.io/nvidia/deepstream:6.4-gc-triton-devel
+        imagePullPolicy: IfNotPresent
+        name: deepstream
+        ports:
+        - containerPort: 8554
+          name: rtsp-out
+          protocol: TCP
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
+        volumeMounts:
+        - mountPath: /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config
+          name: inference-config
+      runtimeClassName: nvidia
+      volumes:
+      - configMap:
+          defaultMode: 511
+          name: deepstream
+        name: inference-config

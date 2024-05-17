@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "deepstream-inference.fullname" . }}-deepstream
+  labels:
+    app: deepstream
+  {{- include "deepstream-inference.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deepstream.replicas }}
+  selector:
+    matchLabels:
+      app: deepstream
+    {{- include "deepstream-inference.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: deepstream
+      {{- include "deepstream-inference.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config/deepstream_setup.sh
+          && cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
+          && sleep infinity
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deepstream.deepstream.image.repository }}:{{ .Values.deepstream.deepstream.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.deepstream.deepstream.imagePullPolicy }}
+        name: deepstream
+        ports:
+        - containerPort: 8554
+          name: rtsp-out
+          protocol: TCP
+        resources: {{- toYaml .Values.deepstream.deepstream.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config
+          name: inference-config
+      runtimeClassName: nvidia
+      volumes:
+      - configMap:
+          defaultMode: 511
+          name: {{ include "deepstream-inference.fullname" . }}-deepstream
+        name: inference-config
