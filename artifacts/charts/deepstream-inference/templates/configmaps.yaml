@@ -263,7 +263,7 @@ data:
     gpu-id=0
     gie-unique-id=1
     nvbuf-memory-type=0
-    config-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/hey_config_infer_primary_yoloV8.txt
+    config-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config_infer_primary_yoloV7.txt
 
     [tracker]
     enable=0
