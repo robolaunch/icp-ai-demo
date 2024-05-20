@@ -35,3 +35,7 @@ videoSink:
     ip: "172.16.44.101"
     port: 32438
     topic: my-topic
+inference:
+  model:
+    url: https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
+    filename: yolov7.pt

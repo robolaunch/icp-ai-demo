@@ -51,10 +51,11 @@ data:
     pip3 install -r requirements.txt
     pip3 install onnx onnxsim onnxruntime
     cp ../DeepStream-Yolo/utils/export_yoloV7.py .
-    wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
-    python3 export_yoloV7.py -w yolov7.pt --dynamic
+    wget {{ .Values.inference.model.url }}
+    mv {{ .Values.inference.model.filename }} main_model.pt
+    python3 export_yoloV7.py -w main_model.pt --dynamic
     cp labels.txt ../DeepStream-Yolo
-    cp yolov7.onnx ../DeepStream-Yolo
+    cp main_model.onnx ../DeepStream-Yolo
     cd /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo
     CUDA_VER=12.2 make -C nvdsinfer_custom_impl_Yolo
     cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
@@ -62,7 +63,7 @@ data:
     # move artifacts from DeepStream-YOLO repository to deepstream-test5
     cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/config_infer_primary_yoloV7.txt .
     cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/labels.txt .
-    cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/yolov7.onnx .
+    cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/main_model.onnx .
     cp -r /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/ .
     
     echo -n \"--------------FINISHED--------------\"
@@ -281,10 +282,10 @@ data:
     gpu-id=0
     net-scale-factor=0.0039215697906911373
     model-color-format=0
-    onnx-file=yolov7.onnx
-    model-engine-file=model_b1_gpu0_fp32.engine
+    onnx-file=../main_model.onnx
+    model-engine-file=../model_b1_gpu0_fp32.engine
     #int8-calib-file=calib.table
-    labelfile-path=labels.txt
+    labelfile-path=../labels.txt
     batch-size=1
     network-mode=0
     num-detected-classes=80
@@ -298,7 +299,7 @@ data:
     #workspace-size=2000
     parse-bbox-func-name=NvDsInferParseYolo
     #parse-bbox-func-name=NvDsInferParseYoloCuda
-    custom-lib-path=nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+    custom-lib-path=../nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
     engine-create-func-name=NvDsInferYoloCudaEngineGet
 
     [class-attrs-all]
