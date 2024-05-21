@@ -66,6 +66,10 @@ data:
     cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/main_model.onnx .
     cp -r /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/ .
     
+    # copy config
+    cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/
+    cp config/inference_config.txt configs/inference_config.txt 
+
     echo -n \"--------------FINISHED--------------\"
   dstest5_msgconv_sample_config.txt: |
     [sensor0]
@@ -264,7 +268,7 @@ data:
     gpu-id=0
     gie-unique-id=1
     nvbuf-memory-type=0
-    config-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config/inference_config.txt
+    config-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/configs/inference_config.txt
 
     [tracker]
     enable=0
