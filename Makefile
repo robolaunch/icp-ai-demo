@@ -39,6 +39,7 @@ generate-charts: helmify
 #	$(HELMIFY) -f ${DS_INFERENCE_MANIFESTS_PATH} -r ${DS_INFERENCE_CHART_PATH}
 
 generate-chart-packages:
+	rm -rf ${CHART_PACKAGES_PATH}
 	$(HELM) package ${KAFKA_CHART_PATH} -d ${CHART_PACKAGES_PATH}
 	$(HELM) package ${DS_INFERENCE_CHART_PATH} -d ${CHART_PACKAGES_PATH}
 	$(HELM) package ${DS_RECORDING_CHART_PATH} -d ${CHART_PACKAGES_PATH}
