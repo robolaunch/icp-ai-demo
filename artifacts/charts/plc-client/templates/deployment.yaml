@@ -21,7 +21,7 @@ spec:
       - command:
         - /bin/bash
         - -c
-        - sleep infinity
+        - python3 connect_to_plc.py config/config.yaml
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
