@@ -2,6 +2,7 @@ KAFKA_MANIFESTS_PATH = artifacts/manifests/kafka
 KAFKA_CHART_PATH = artifacts/charts/kafka
 DS_INFERENCE_MANIFESTS_PATH = artifacts/manifests/deepstream-inference
 DS_INFERENCE_CHART_PATH = artifacts/charts/deepstream-inference
+DS_RECORDING_CHART_PATH = artifacts/charts/deepstream-recording
 CHART_PACKAGES_PATH = artifacts/packages
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
@@ -40,4 +41,5 @@ generate-charts: helmify
 generate-chart-packages:
 	$(HELM) package ${KAFKA_CHART_PATH} -d ${CHART_PACKAGES_PATH}
 	$(HELM) package ${DS_INFERENCE_CHART_PATH} -d ${CHART_PACKAGES_PATH}
+	$(HELM) package ${DS_RECORDING_CHART_PATH} -d ${CHART_PACKAGES_PATH}
 
