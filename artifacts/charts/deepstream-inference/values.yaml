@@ -37,5 +37,5 @@ videoSink:
     topic: my-topic
 inference:
   model:
-    url: https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
-    filename: yolov7.pt
+    url: https://github.com/robolaunch/deepstream-test5-playground/releases/download/test/best.pt
+    filename: best.pt

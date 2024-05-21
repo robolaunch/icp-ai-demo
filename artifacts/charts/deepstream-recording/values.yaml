@@ -15,7 +15,7 @@ deepstream:
   replicas: 1
   type: NodePort
 kubernetesClusterDomain: cluster.local
-rtspSourceURL: rtsp://172.16.44.172:8554/mystream
+rtspSourceURL: rtsp://172.16.44.101:32608/ds-test
 videoSink:
   width: 1280
   height: 720
@@ -30,4 +30,4 @@ recording:
   kafka:
     ip: "172.16.44.101"
     port: 32438
-    topic: # list
+    topic: record

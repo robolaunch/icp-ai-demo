@@ -192,12 +192,14 @@ data:
     bitrate=1000000
     {{ end }}
 
+    {{ if (default .Values.recording.enabled true) }}
     [message-consumer0]
     enable=1
     proto-lib=/opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so
-    conn-str=172.16.44.101;32438
+    conn-str={{ .Values.recording.kafka.ip }};{{ .Values.recording.kafka.port }}
     config-file=/opt/nvidia/deepstream/deepstream/sources/libs/kafka_protocol_adaptor/cfg_kafka.txt
-    subscribe-topic-list=record
+    subscribe-topic-list={{ .Values.recording.kafka.topic }}
+    {{ end }}
 
     [streammux]
     gpu-id=0
