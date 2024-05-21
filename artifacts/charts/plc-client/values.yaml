@@ -1,0 +1,23 @@
+kubernetesClusterDomain: cluster.local
+plc:
+  plcClient:
+    image:
+      repository: robolaunchio/plc-client
+      tag: 0.1.0
+    imagePullPolicy: IfNotPresent
+  replicas: 1
+config:
+  kafka:
+    group: my-group
+    ip: "172.16.44.101"
+    port: 32438
+    topic: my-topic
+  plc:
+    action:
+      circuitKeyID: 0
+      datablockID: 0
+      startMessage: "devam"
+      stopMessage: "delik"
+    ip: "172.16.44.130"
+    rack: 0
+    slot: 1

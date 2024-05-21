@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "plc-client.fullname" . }}-plc
+  labels:
+    app: plc-client
+  {{- include "plc-client.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.plc.replicas }}
+  selector:
+    matchLabels:
+      app: plc-client
+    {{- include "plc-client.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: plc-client
+      {{- include "plc-client.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - sleep infinity
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.plc.plcClient.image.repository }}:{{ .Values.plc.plcClient.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.plc.plcClient.imagePullPolicy }}
+        name: plc-client
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/plc/config
+          name: plc-client-config
+      runtimeClassName: nvidia
+      volumes:
+      - configMap:
+          defaultMode: 511
+          name: {{ include "plc-client.fullname" . }}-client-config
+        name: plc-client-config

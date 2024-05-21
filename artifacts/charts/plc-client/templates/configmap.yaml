@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "plc-client.fullname" . }}-client-config
+  labels:
+  {{- include "plc-client.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+  {{- toYaml $.Values.config | nindent 4 }}
