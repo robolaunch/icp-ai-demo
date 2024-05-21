@@ -1,0 +1,14 @@
+kafka:
+  group: my-group
+  ip: "172.16.44.101"
+  port: 32438
+  topic: my-topic
+plc:
+  action:
+    circuitKeyID: 0
+    datablockID: 0
+    startMessage: "devam"
+    stopMessage: "delik"
+  ip: "172.16.44.130"
+  rack: 0
+  slot: 1

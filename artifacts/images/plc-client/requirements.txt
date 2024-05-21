@@ -1,0 +1,4 @@
+kafka_python==2.0.2
+pydantic==2.7.1
+python_snap7==1.4
+PyYAML==6.0.1
