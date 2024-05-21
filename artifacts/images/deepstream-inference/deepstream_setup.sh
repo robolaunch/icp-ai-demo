@@ -41,7 +41,7 @@ git clone https://github.com/WongKinYiu/yolov7.git
 git clone https://github.com/marcoslucianops/DeepStream-Yolo
 cd /opt/nvidia/deepstream/deepstream-6.4/yolov7
 pip3 install -r requirements.txt
-pip3 install onnx onnxsim onnxruntime
+pip3 install onnx onnxsim onnxruntime ultralytics
 
 cd /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo
 CUDA_VER=12.2 make -C nvdsinfer_custom_impl_Yolo
