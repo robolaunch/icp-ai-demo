@@ -4,7 +4,7 @@ deepstream:
       # repository: nvcr.io/nvidia/deepstream
       # tag: 6.4-gc-triton-devel
       repository: robolaunchio/deepstream-inference
-      tag: 6.4-gc-triton-devel-v0.1.0
+      tag: 6.4-gc-triton-devel-v0.1.1
     imagePullPolicy: IfNotPresent
     resources:
       limits:
@@ -41,3 +41,7 @@ inference:
   model:
     url: https://github.com/robolaunch/deepstream-test5-playground/releases/download/test/best.pt
     filename: best.pt
+    # url: https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
+    # filename: yolov7.pt
+    framework: "YOLOV8" # or YOLOV8
+    format: "pt"
