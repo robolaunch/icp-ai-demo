@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: plc-client
+  name: plc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plc-client
+  template:
+    metadata:
+      labels:
+        app: plc-client
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - sleep infinity
+        image: robolaunchio/plc-client:0.1.0
+        imagePullPolicy: IfNotPresent
+        name: plc-client
+        volumeMounts:
+        - mountPath: /opt/plc/config
+          name: plc-client-config
+      runtimeClassName: nvidia
+      volumes:
+      - configMap:
+          defaultMode: 511
+          name: plc-client-config
+        name: plc-client-config
