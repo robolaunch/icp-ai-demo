@@ -1,8 +1,10 @@
 deepstream:
   deepstream:
     image:
-      repository: nvcr.io/nvidia/deepstream
-      tag: 6.4-gc-triton-devel
+      # repository: nvcr.io/nvidia/deepstream
+      # tag: 6.4-gc-triton-devel
+      repository: robolaunchio/deepstream-recording
+      tag: 6.4-gc-triton-devel-v0.1.0
     imagePullPolicy: IfNotPresent
     resources:
       limits:
@@ -15,7 +17,7 @@ deepstream:
   replicas: 1
   type: NodePort
 kubernetesClusterDomain: cluster.local
-rtspSourceURL: rtsp://172.16.44.101:32608/ds-test
+rtspSourceURL: rtsp://172.16.44.101:30725/ds-test
 videoSink:
   width: 1280
   height: 720

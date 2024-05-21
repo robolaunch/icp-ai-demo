@@ -21,9 +21,9 @@ spec:
       - command:
         - /bin/bash
         - -c
-        - /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config/recording_setup.sh
+        - /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config/init.sh
           && cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
-          && sleep infinity
+          && ./deepstream-test5-app -c config/deepstream_config.txt -p 0
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
