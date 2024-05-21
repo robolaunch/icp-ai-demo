@@ -1,5 +1,5 @@
 from kafka import KafkaConsumer, KafkaProducer
-import snap7, json, yaml, sys
+import snap7, json, yaml, sys, logging
 from pydantic import BaseModel, Field
 from typing import List, Union
 
@@ -49,7 +49,7 @@ class DSMinimalSensorData(BaseModel):
 #####################################################################################################################
 
 if len(sys.argv) < 2:
-    print("Konfigürasyon dosyası bulunamadı.")
+    logging.error("Konfigürasyon dosyası bulunamadı.")
     exit(1)
 
 
@@ -58,7 +58,7 @@ with open(sys.argv[1]) as stream:
         data = yaml.safe_load(stream)
         cfg = PLCClientConfig.model_validate(data)
     except yaml.YAMLError as exc:
-        print(exc)
+        logging.error(exc)
         exit(1)
 
 try:
@@ -70,20 +70,20 @@ try:
                          bootstrap_servers=[kafka_broker_url],
                          auto_offset_reset='latest')
     producer = KafkaProducer(bootstrap_servers=[kafka_broker_url])
-    print("Connected to the Kafka.")
+    logging.warning("Connected to the Kafka.")
 except Exception as e:
-    print(str(e))
+    logging.error(str(e))
     exit(1)
 
 try:
     client = snap7.client.Client()
     client.connect(cfg.plc.ip, cfg.plc.rack, cfg.plc.slot)
-    print("Connected to the PLC.")
+    logging.warning("Connected to the PLC.")
 except Exception as e:
-    print(str(e))
+    logging.error(str(e))
     exit(1)
 
-print("Starting to listen topic: " + cfg.kafka.topic)
+logging.warning("Starting to listen topic: " + cfg.kafka.topic)
 
 for message in consumer:
 
@@ -91,25 +91,25 @@ for message in consumer:
     decoded_msg = msg_bytes.decode("utf-8")
 
     if cfg.plc.action.start_message in decoded_msg:
-        print("Anahtar yeniden açılıyor.")
+        logging.warning("Anahtar yeniden açılıyor.")
 
         command = 1
         client.write_area(snap7.types.Areas.PE, cfg.plc.action.datablock_id, cfg.plc.action.circuit_key_id, bytearray([command]))
 
         current_data = client.read_area(snap7.types.Areas.PE, cfg.plc.action.datablock_id, cfg.plc.action.circuit_key_id, 1)
-        print("Anahtar değeri: " + str(int.from_bytes(current_data, "big")))
+        logging.warning("Anahtar değeri: " + str(int.from_bytes(current_data, "big")))
         continue
 
     try:
         sensor_data = DSMinimalSensorData(**json.loads(decoded_msg))
-        print("Sensörden veri alındı.")
+        logging.warning("Sensörden veri alındı.")
     except:
-        print("Sensör dışı mesaj atlanıyor.")
+        logging.warning("Sensör dışı mesaj atlanıyor.")
         continue
 
     if cfg.plc.action.stop_message in str(sensor_data.objects):
 
-        print("Delik tespit edildi. Anahtar kapatılıyor.")
+        logging.warning("Delik tespit edildi. Anahtar kapatılıyor.")
         
         # stop PLC circuit key
 
@@ -117,4 +117,4 @@ for message in consumer:
         client.write_area(snap7.types.Areas.PE, cfg.plc.action.datablock_id, cfg.plc.action.circuit_key_id, bytearray([command]))
         
         current_data = client.read_area(snap7.types.Areas.PE, cfg.plc.action.datablock_id, cfg.plc.action.circuit_key_id, 1)
-        print("Anahtar değeri: " + str(int.from_bytes(current_data, "big")))
+        logging.warning("Anahtar değeri: " + str(int.from_bytes(current_data, "big")))
