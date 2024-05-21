@@ -39,22 +39,27 @@ make
 cd /opt/nvidia/deepstream/deepstream-6.4
 git clone https://github.com/WongKinYiu/yolov7.git
 git clone https://github.com/marcoslucianops/DeepStream-Yolo
-cd yolov7
+cd /opt/nvidia/deepstream/deepstream-6.4/yolov7
 pip3 install -r requirements.txt
 pip3 install onnx onnxsim onnxruntime
-cp ../DeepStream-Yolo/utils/export_yoloV7.py .
-wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
-python3 export_yoloV7.py -w yolov7.pt --dynamic
-cp labels.txt ../DeepStream-Yolo
-cp yolov7.onnx ../DeepStream-Yolo
+
 cd /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo
 CUDA_VER=12.2 make -C nvdsinfer_custom_impl_Yolo
-cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
 
-# move artifacts from DeepStream-YOLO repository to deepstream-test5
-cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/config_infer_primary_yoloV7.txt .
-cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/labels.txt .
-cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/yolov7.onnx .
-cp -r /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/ .
+# # convert model
+# cd /opt/nvidia/deepstream/deepstream-6.4/yolov7
+# cp ../DeepStream-Yolo/utils/export_yoloV7.py .
+# wget https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
+# python3 export_yoloV7.py -w yolov7.pt --dynamic
+# cp labels.txt ../DeepStream-Yolo
+# cp yolov7.onnx ../DeepStream-Yolo
+
+# cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
+
+# # move artifacts from DeepStream-YOLO repository to deepstream-test5
+# cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/config_infer_primary_yoloV7.txt .
+# cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/labels.txt .
+# cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/yolov7.onnx .
+# cp -r /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/ .
 
 echo -n \"--------------FINISHED--------------\"
