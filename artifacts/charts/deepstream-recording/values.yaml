@@ -29,7 +29,24 @@ recording:
   duration: 3
   interval: 3
   cache: 10
-  kafka:
-    ip: "172.16.44.101"
-    port: 32438
-    topic: record
+  agent:
+    config:
+      consumedKafka:
+        ip: 172.16.44.101
+        port: 32438
+        topic: my-topic
+      producedKafka:
+        ip: 172.16.44.101
+        port: 32438
+        topic: record
+      action:
+        deltaSeconds: 3
+        startMessage: delik
+    kubernetesClusterDomain: cluster.local
+    recordingAgent:
+      recordingAgent:
+        image:
+          repository: robolaunchio/recording-agent
+          tag: 0.1.2
+        imagePullPolicy: IfNotPresent
+      replicas: 1

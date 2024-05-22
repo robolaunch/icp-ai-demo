@@ -45,3 +45,45 @@ spec:
           defaultMode: 511
           name: {{ include "deepstream-inference.fullname" . }}-deepstream
         name: inference-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "deepstream-inference.fullname" . }}-recording-agent
+  labels:
+    app: recording-agent
+  {{- include "deepstream-inference.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.recording.agent.recordingAgent.replicas }}
+  selector:
+    matchLabels:
+      app: recording-agent
+    {{- include "deepstream-inference.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: recording-agent
+      {{- include "deepstream-inference.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - python3 map_recording_requests.py config/config.yaml
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.recording.agent.kubernetesClusterDomain }}
+        image: {{ .Values.recording.agent.recordingAgent.recordingAgent.image.repository }}:{{ .Values.recording.agent.recordingAgent.recordingAgent.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.recording.agent.recordingAgent.recordingAgent.imagePullPolicy }}
+        name: recording-agent
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/recording-agent/config
+          name: recording-agent-config
+      runtimeClassName: nvidia
+      volumes:
+      - configMap:
+          defaultMode: 511
+          name: {{ include "deepstream-inference.fullname" . }}-recording-agent-config
+        name: recording-agent-config

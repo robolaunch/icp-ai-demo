@@ -162,9 +162,9 @@ data:
     [message-consumer0]
     enable=1
     proto-lib=/opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so
-    conn-str={{ .Values.recording.kafka.ip }};{{ .Values.recording.kafka.port }}
+    conn-str={{ .Values.recording.agent.config.producedKafka.ip }};{{ .Values.recording.agent.config.producedKafka.port }}
     config-file=/opt/nvidia/deepstream/deepstream/sources/libs/kafka_protocol_adaptor/cfg_kafka.txt
-    subscribe-topic-list={{ .Values.recording.kafka.topic }}
+    subscribe-topic-list={{ .Values.recording.agent.config.producedKafka.topic }}
     {{ end }}
 
     [streammux]
@@ -188,3 +188,13 @@ data:
 
     [tests]
     file-loop=0
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "deepstream-inference.fullname" . }}-recording-agent-config
+  labels:
+  {{- include "deepstream-inference.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+  {{- toYaml $.Values.recording.agent.config | nindent 4 }}
