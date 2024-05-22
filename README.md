@@ -24,10 +24,10 @@ Clone repository.
 ```bash
 git clone https://github.com/robolaunch/icp-ai-demo
 cd icp-ai-demo
-git checkout 1ae436dc60d5951c12713c4f5031a5c3b7778d99
+git checkout 0.1.0
 ```
 
-Generate Helm charts.
+Generate Helm charts or fetch them from [releases](https://github.com/robolaunch/icp-ai-demo/releases/tag/0.1.0).
 
 ```bash
 make generate-chart-packages
