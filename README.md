@@ -5,8 +5,6 @@ This project aims to demonstrate building an inference pipeline on robolaunch IC
 
 ## Table of Contents
 
-[EDIT THIS: Add your headers to table of contents.]
-
 - [Overview](#overview)
 - [Quick Start](#quick-start)
 
@@ -17,6 +15,9 @@ Repository contains four charts:
 - Recording Agent
 - DeepStream Recording
 - PLC Client
+
+![robolaunch ICP - Inference Pipeline Demo](https://github.com/robolaunch/icp-ai-demo/assets/46759747/c713213f-1f1e-4990-814a-b6ccfdaf9bd7)
+
 
 ## Quick Start
 
