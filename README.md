@@ -10,9 +10,8 @@ This project aims to demonstrate building an inference pipeline on robolaunch IC
 
 ## Overview
 
-Repository contains four charts:
+Repository contains three charts:
 - DeepStream Inference
-- Recording Agent
 - DeepStream Recording
 - PLC Client
 
@@ -38,10 +37,6 @@ Install charts. Remember manipulating chart values.
 
 ```bash
 helm install ds-inference ./artifacts/packages/deepstream-inference-0.1.0.tgz -n deepstream-test
-```
-
-```bash
-helm install recording-agent ./artifacts/packages/recording-agent-0.1.0.tgz -n recording-agent
 ```
 
 ```bash
