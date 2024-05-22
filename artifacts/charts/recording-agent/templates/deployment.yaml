@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "recording-agent.fullname" . }}-recording-agent
+  labels:
+    app: recording-agent
+  {{- include "recording-agent.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.recordingAgent.replicas }}
+  selector:
+    matchLabels:
+      app: recording-agent
+    {{- include "recording-agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: recording-agent
+      {{- include "recording-agent.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - sleep infinity
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.recordingAgent.recordingAgent.image.repository }}:{{ .Values.recordingAgent.recordingAgent.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.recordingAgent.recordingAgent.imagePullPolicy }}
+        name: recording-agent
+        resources: {}
+        volumeMounts:
+        - mountPath: /opt/recording-agent/config
+          name: recording-agent-config
+      runtimeClassName: nvidia
+      volumes:
+      - configMap:
+          defaultMode: 511
+          name: {{ include "recording-agent.fullname" . }}-config
+        name: recording-agent-config
