@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: recording-agent-config
+  namespace: recording-agent
+data:
+  config.yaml: |
+    consumedKafka:
+      group: my-group
+      ip: 172.16.44.101
+      port: 32438
+      topic: my-topic
+    producedKafka:
+      group: my-group
+      ip: 172.16.44.101
+      port: 32438
+      topic: record
+    action:
+      deltaSeconds: 3
+      startMessage: delik

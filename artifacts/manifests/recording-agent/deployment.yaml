@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: recording-agent
+  name: recording-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recording-agent
+  template:
+    metadata:
+      labels:
+        app: recording-agent
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - sleep infinity
+        image: robolaunchio/recording-agent:0.1.0
+        imagePullPolicy: IfNotPresent
+        name: recording-agent
+        volumeMounts:
+        - mountPath: /opt/recording-agent/config
+          name: recording-agent-config
+      runtimeClassName: nvidia
+      volumes:
+      - configMap:
+          defaultMode: 511
+          name: recording-agent-config
+        name: recording-agent-config
