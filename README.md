@@ -15,8 +15,7 @@ Repository contains three charts:
 - DeepStream Recording
 - PLC Client
 
-![robolaunch ICP - Inference Pipeline Demo](https://github.com/robolaunch/icp-ai-demo/assets/46759747/c713213f-1f1e-4990-814a-b6ccfdaf9bd7)
-
+![robolaunch ICP - ML Inference Pipeline Demo Schema](https://github.com/robolaunch/icp-ai-demo/assets/46759747/5f2eb7dd-77b1-45af-80f1-4c0da61a6262)
 
 ## Quick Start
 
