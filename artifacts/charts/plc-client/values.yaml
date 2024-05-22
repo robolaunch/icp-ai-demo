@@ -8,7 +8,6 @@ plc:
   replicas: 1
 config:
   kafka:
-    group: my-group
     ip: "172.16.44.101"
     port: 32438
     topic: my-topic
