@@ -1,0 +1,4 @@
+kafka_python==2.0.2
+pydantic==2.7.1
+python_dateutil==2.8.1
+PyYAML==6.0.1
