@@ -2,7 +2,7 @@ FROM ubuntu:jammy
 SHELL ["/bin/bash", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
 
-ARG APPLICATION_PATH=/opt/plc
+ARG APPLICATION_PATH=/opt/recording-agent
 RUN mkdir -p ${APPLICATION_PATH}
 COPY . ${APPLICATION_PATH}
 
