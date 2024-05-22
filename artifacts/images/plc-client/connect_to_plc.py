@@ -7,7 +7,6 @@ class KafkaConfig(BaseModel):
     ip: str = Field(description="IP of the Kafka broker")
     port: int = Field(description="Port of the Kafka broker")
     topic: str = Field(description="Topic to listen")
-    group: str = Field(description="Group of the Kafka topic")
 
 class PLCActionConfig(BaseModel):
     stop_message: str = Field(description="Stop message", alias="stopMessage")
@@ -64,9 +63,7 @@ with open(sys.argv[1]) as stream:
 try:
     kafka_broker_url = cfg.kafka.ip + ":" + str(cfg.kafka.port)
     sensor_topic = cfg.kafka.topic
-    group = cfg.kafka.group
     consumer = KafkaConsumer(sensor_topic,
-                         group_id=group,
                          bootstrap_servers=[kafka_broker_url],
                          auto_offset_reset='latest')
     producer = KafkaProducer(bootstrap_servers=[kafka_broker_url])

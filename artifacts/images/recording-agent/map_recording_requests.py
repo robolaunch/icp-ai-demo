@@ -9,7 +9,6 @@ class KafkaConfig(BaseModel):
     ip: str = Field(description="IP of the Kafka broker")
     port: int = Field(description="Port of the Kafka broker")
     topic: str = Field(description="Topic to listen")
-    group: str = Field(description="Group of the Kafka topic")
 
 class RecordingActionConfig(BaseModel):
     start_message: str = Field(description="Start message", alias="startMessage")
