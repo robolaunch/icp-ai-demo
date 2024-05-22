@@ -15,4 +15,4 @@ RUN set -eux; \
 RUN set -eux; \
     pip install -r requirements.txt
 
-CMD ["/bin/bash", "-c", "python3 connect_to_plc.py sample.yaml"]
+CMD ["/bin/bash", "-c", "python3 map_recording_requests.py sample.yaml"]
