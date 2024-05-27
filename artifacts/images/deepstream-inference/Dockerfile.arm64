@@ -5,3 +5,6 @@ COPY deepstream_setup.sh .
 RUN set -eux; \
     chmod +x deepstream_setup.sh; \
     bash deepstream_setup.sh
+RUN set -eux; \
+    apt-get update && \
+    apt-get install -y kmod
