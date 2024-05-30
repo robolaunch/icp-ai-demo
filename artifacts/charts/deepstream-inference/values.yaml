@@ -1,15 +1,13 @@
-runtimeClassName: nvidia
+runtimeClassName: ""
 deepstream:
   deepstream:
     image:
-      # repository: nvcr.io/nvidia/deepstream
-      # tag: 7.0-gc-triton-devel
       repository: robolaunchio/deepstream-inference
-      tag: 7.0-gc-triton-devel-v0.1.1
+      tag: 7.0-triton-multiarch-v0.1.0-arm64
     imagePullPolicy: IfNotPresent
-    resources:
-      limits:
-        nvidia.com/gpu: "1"
+    # resources:
+    #   limits:
+    #     nvidia.com/gpu: "1"
   ports:
   - name: rtsp-out
     port: 8554
@@ -34,7 +32,7 @@ videoSink:
     enabled: true
     port: 8554
   kafka:
-    enabled: true
+    enabled: false
     ip: "172.16.44.101"
     port: 32438
     topic: my-topic
@@ -42,7 +40,8 @@ inference:
   model:
     url: https://github.com/robolaunch/deepstream-test5-playground/releases/download/test/best.pt
     filename: best.pt
-    # url: https://github.com/WongKinYiu/yolov7/releases/download/v0.1/yolov7.pt
-    # filename: yolov7.pt
-    framework: "YOLOV8" # or YOLOV8
+    framework: "YOLOV8"
     format: "pt"
+    trtEnabled: false
+    trtURL: https://github.com/robolaunch/deepstream-test5-playground/releases/download/test/best.pt
+    trtFilename: test.trt

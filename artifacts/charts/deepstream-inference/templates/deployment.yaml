@@ -22,7 +22,7 @@ spec:
         - /bin/bash
         - -c
         - /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/config/init.sh
-          && cd /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5
+          && cd /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5 {{ if eq .Values.inference.model.trtEnabled true }} && wget {{ .Values.inference.model.trtURL }} && mv {{ .Values.inference.model.trtFilename }} model_b1_gpu_fp32.engine {{ end }}
           && ./deepstream-test5-app -c config/deepstream_config.txt -p 0
         # - sleep infinity
         env:
@@ -40,7 +40,9 @@ spec:
         volumeMounts:
         - mountPath: /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/config
           name: inference-config
-      runtimeClassName: {{ .Values.runtimeClassName }}
+      {{ if eq .Values.runtimeClassName "nvidia" }}
+      runtimeClassName: nvidia
+      {{ end }}
       volumes:
       - configMap:
           defaultMode: 511
