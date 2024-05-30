@@ -185,6 +185,7 @@ data:
     gpu-id=0
     nvbuf-memory-type=0
 
+    {{ if eq .Values.videoSink.kafka.enabled true }}
     [sink1]
     enable=1
     source-id=0
@@ -197,8 +198,9 @@ data:
     msg-broker-proto-lib=/opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so
     msg-broker-conn-str={{ .Values.videoSink.kafka.ip }};{{ .Values.videoSink.kafka.port }};{{ .Values.videoSink.kafka.topic }}
     topic={{ .Values.videoSink.kafka.topic }}
+    {{ end }}
 
-    {{ if (default .Values.videoSink.rtsp.enabled true) }}
+    {{ if eq .Values.videoSink.rtsp.enabled true }}
     [sink2]
     enable=1
     type=4
@@ -209,7 +211,7 @@ data:
     bitrate=1000000
     {{ end }}
 
-    {{ if (default .Values.boundingBoxes.enabled true) }}
+    {{ if eq .Values.boundingBoxes.enabled true }}
     [osd]
     enable=1
     gpu-id=0
