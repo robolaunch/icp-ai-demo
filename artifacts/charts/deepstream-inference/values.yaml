@@ -3,9 +3,9 @@ deepstream:
   deepstream:
     image:
       # repository: nvcr.io/nvidia/deepstream
-      # tag: 6.4-gc-triton-devel
+      # tag: 7.0-gc-triton-devel
       repository: robolaunchio/deepstream-inference
-      tag: 6.4-gc-triton-devel-v0.1.1
+      tag: 7.0-gc-triton-devel-v0.1.1
     imagePullPolicy: IfNotPresent
     resources:
       limits:

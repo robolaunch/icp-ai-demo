@@ -8,7 +8,7 @@ data:
   init.sh: |
     #!/bin/bash
 
-    mkdir -p cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/recordings
+    mkdir -p cd /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/recordings
     
     echo -n \"--------------FINISHED--------------\"
   dstest5_msgconv_sample_config.txt: |
@@ -141,7 +141,7 @@ data:
     {{ if (default .Values.recording.enabled true) }}
     smart-record=1
     smart-rec-container=0
-    smart-rec-dir-path=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/recordings
+    smart-rec-dir-path=/opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/recordings
     smart-rec-cache={{ .Values.recording.cache }}
     smart-rec-default-duration={{ .Values.recording.duration }}
     smart-rec-interval={{ .Values.recording.interval }}

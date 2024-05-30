@@ -21,8 +21,8 @@ spec:
       - command:
         - /bin/bash
         - -c
-        - /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config/init.sh
-          && cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
+        - /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/config/init.sh
+          && cd /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5
           && ./deepstream-test5-app -c config/deepstream_config.txt -p 0
         # - sleep infinity
         env:
@@ -38,7 +38,7 @@ spec:
           protocol: TCP
         resources: {{- toYaml .Values.deepstream.deepstream.resources | nindent 10 }}
         volumeMounts:
-        - mountPath: /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config
+        - mountPath: /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/config
           name: inference-config
       runtimeClassName: {{ .Values.runtimeClassName }}
       volumes:

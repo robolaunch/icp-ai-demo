@@ -12,7 +12,7 @@ data:
 
     {{ if eq .Values.inference.model.framework "YOLOV7" }}
     # apply if converted from YOLOV7
-    cd /opt/nvidia/deepstream/deepstream-6.4/yolov7
+    cd /opt/nvidia/deepstream/deepstream-7.0/yolov7
     cp ../DeepStream-Yolo/utils/export_yoloV7.py .
     wget {{ .Values.inference.model.url }}
     mv {{ .Values.inference.model.filename }} main_model.pt
@@ -21,7 +21,7 @@ data:
 
     {{ if eq .Values.inference.model.framework "YOLOV8" }}
     # apply if converted from YOLOV8
-    cd /opt/nvidia/deepstream/deepstream-6.4/yolov7
+    cd /opt/nvidia/deepstream/deepstream-7.0/yolov7
     cp ../DeepStream-Yolo/utils/export_yoloV8.py .
     wget {{ .Values.inference.model.url }}
     mv {{ .Values.inference.model.filename }} main_model.pt
@@ -30,18 +30,18 @@ data:
 
     cp labels.txt ../DeepStream-Yolo
     cp main_model.onnx ../DeepStream-Yolo
-    cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5
+    cd /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5
     
     # move artifacts from DeepStream-YOLO repository to deepstream-test5
-    # cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/config_infer_primary_yoloV7.txt .
-    cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/labels.txt .
-    cp /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/main_model.onnx .
-    cp -r /opt/nvidia/deepstream/deepstream-6.4/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/ .
+    # cp /opt/nvidia/deepstream/deepstream-7.0/DeepStream-Yolo/config_infer_primary_yoloV7.txt .
+    cp /opt/nvidia/deepstream/deepstream-7.0/DeepStream-Yolo/labels.txt .
+    cp /opt/nvidia/deepstream/deepstream-7.0/DeepStream-Yolo/main_model.onnx .
+    cp -r /opt/nvidia/deepstream/deepstream-7.0/DeepStream-Yolo/nvdsinfer_custom_impl_Yolo/ .
 
     {{ end }}
     
     # copy config
-    cd /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/
+    cd /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/
     cp config/inference_config.txt configs/inference_config.txt 
 
     echo -n \"--------------FINISHED--------------\"
@@ -181,7 +181,7 @@ data:
     source-id=0
     container=1
     codec=2
-    output-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/out.mp4
+    output-file=/opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/out.mp4
     gpu-id=0
     nvbuf-memory-type=0
 
@@ -242,7 +242,7 @@ data:
     gpu-id=0
     gie-unique-id=1
     nvbuf-memory-type=0
-    config-file=/opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/configs/inference_config.txt
+    config-file=/opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/configs/inference_config.txt
 
     [tracker]
     enable=0
