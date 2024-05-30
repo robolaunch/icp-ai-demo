@@ -1,3 +1,4 @@
+runtimeClassName: nvidia
 deepstream:
   deepstream:
     image:
@@ -30,6 +31,7 @@ recording:
   interval: 3
   cache: 10
   agent:
+    runtimeClassName: nvidia
     config:
       consumedKafka:
         ip: 172.16.44.101

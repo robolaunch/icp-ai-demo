@@ -1,3 +1,4 @@
+runtimeClassName: nvidia
 deepstream:
   deepstream:
     image:

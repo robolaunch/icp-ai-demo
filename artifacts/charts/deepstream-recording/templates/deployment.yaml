@@ -39,7 +39,7 @@ spec:
         volumeMounts:
         - mountPath: /opt/nvidia/deepstream/deepstream-6.4/sources/apps/sample_apps/deepstream-test5/config
           name: inference-config
-      runtimeClassName: nvidia
+      runtimeClassName: {{ .Values.runtimeClassName }}
       volumes:
       - configMap:
           defaultMode: 511
@@ -81,7 +81,7 @@ spec:
         volumeMounts:
         - mountPath: /opt/recording-agent/config
           name: recording-agent-config
-      runtimeClassName: nvidia
+      runtimeClassName: {{ .Values.recording.agent.runtimeClassName }}
       volumes:
       - configMap:
           defaultMode: 511

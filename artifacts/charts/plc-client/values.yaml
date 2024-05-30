@@ -1,3 +1,4 @@
+runtimeClassName: nvidia
 kubernetesClusterDomain: cluster.local
 plc:
   plcClient:

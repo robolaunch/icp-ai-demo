@@ -33,7 +33,7 @@ spec:
         volumeMounts:
         - mountPath: /opt/plc/config
           name: plc-client-config
-      runtimeClassName: nvidia
+      runtimeClassName: {{ .Values.runtimeClassName }}
       volumes:
       - configMap:
           defaultMode: 511
