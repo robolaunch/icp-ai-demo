@@ -40,6 +40,10 @@ spec:
         volumeMounts:
         - mountPath: /opt/nvidia/deepstream/deepstream-7.0/sources/apps/sample_apps/deepstream-test5/config
           name: inference-config
+      {{ if eq .Values.source.type "camera" }}
+        securityContext:
+          privileged: true
+      {{ end }}
       {{ if eq .Values.runtimeClassName "nvidia" }}
       runtimeClassName: nvidia
       {{ end }}

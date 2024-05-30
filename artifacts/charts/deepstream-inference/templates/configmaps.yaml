@@ -164,14 +164,31 @@ data:
     gpu-id=0
     nvbuf-memory-type=0
 
+    {{ if eq .Values.source.type "rtsp" }}
     [source0]
     enable=1
     type=4
-    uri={{ .Values.rtspSourceURL }}
+    uri={{ .Values.source.rtspURL }}
     num-sources=1
     gpu-id=0
     cudadec-memtype=0
     nvbuf-memory-type=0
+    {{ end }}
+
+    {{ if eq .Values.source.type "camera" }}
+    [source0]
+    enable=1
+    type=1
+    camera-id=0
+    camera-width={{ .Values.source.cameraWidth }}
+    camera-height={{ .Values.source.cameraHeight }}
+    camera-fps-n={{ .Values.source.cameraFPS }}
+    camera-v4l2-dev-node={{ .Values.source.cameraNode }}
+    num-sources=1
+    gpu-id=0
+    cudadec-memtype=0
+    {{ end }}
+
 
     [sink0]
     enable=0

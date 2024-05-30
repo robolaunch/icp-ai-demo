@@ -17,6 +17,13 @@ deepstream:
   type: NodePort
 kubernetesClusterDomain: cluster.local
 rtspSourceURL: rtsp://172.16.44.172:8554/mystream
+source:
+  type: rtsp # or camera
+  rtspURL: rtsp://172.16.44.172:8554/mystream
+  cameraWidth: 1280
+  cameraHeight: 720
+  cameraFPS: 30
+  cameraNode: 4
 boundingBoxes:
   enabled: true
   borderWidth: 5
