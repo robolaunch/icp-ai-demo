@@ -2,6 +2,7 @@
 
 # from deepstream-test5
 cd /opt/nvidia/deepstream/deepstream-7.0
+apt-get update
 apt-get install -y \
     libgstreamer-plugins-base1.0-dev \
     libgstreamer1.0-dev \
