@@ -2,6 +2,10 @@
 
 # from deepstream-test5
 cd /opt/nvidia/deepstream/deepstream-7.0
+
+apt-get update
+./user_additional_install.sh
+
 apt-get install -y \
     libgstreamer-plugins-base1.0-dev \
     libgstreamer1.0-dev \
@@ -41,7 +45,7 @@ git clone https://github.com/WongKinYiu/yolov7.git
 git clone https://github.com/marcoslucianops/DeepStream-Yolo
 cd /opt/nvidia/deepstream/deepstream-7.0/yolov7
 pip3 install -r requirements.txt
-pip3 install onnx onnxsim onnxruntime ultralytics
+pip3 install onnx onnxruntime ultralytics
 
 cd /opt/nvidia/deepstream/deepstream-7.0/DeepStream-Yolo
 CUDA_VER=12.2 make -C nvdsinfer_custom_impl_Yolo
